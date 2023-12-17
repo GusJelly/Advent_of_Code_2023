@@ -8,35 +8,37 @@ import (
 	"strings"
 )
 
+type Cube struct {
+	number int
+	color  string
+}
+
 type Round struct {
-	red int
-	green int
-	blue int
+	id          int
+	numberCubes []Cube
 }
 
 type Game struct {
-	id int
+	id     int
 	rounds []Round
 }
 
 func main() {
-	lines := readFile("input")
-	for _, line := range lines {
-		fmt.Println()
-		fmt.Println("getGameId: ", getGameId(tokenize(line)))
-		fmt.Println("getRounds: ", getRounds(tokenize(line)))
-	}
+	lines := loadFile("input")
+
+	getCubeNumber(lines[0])
 }
 
-// Gets the different rounds in a game
-func getRounds(tokens []string) []Round {
-	var rounds []Round
+// Get cubeNumber
+func getCubeNumber(line string) {
+	_, line, _ = strings.Cut(line, ":")
+	line = strings.Trim(line, " ")
+	rounds := strings.Split(line, ";")
 
-	for i := 2; i < len(tokens); i++ {
-		fmt.Printf("%s ", tokens[i])
+	for i := 0; i < len(rounds); i++ {
+		rounds[i] = strings.Trim(rounds[i], " ")
+		fmt.Println(rounds[i])
 	}
-
-	return rounds
 }
 
 // Gets the game's id from the game's tokens slice
@@ -50,7 +52,7 @@ func getGameId(tokens []string) int {
 }
 
 // Loads a given file into a string slice
-func readFile(name string) []string {
+func loadFile(name string) []string {
 	// Load the file from the system
 	file, err := os.Open(name)
 	if err != nil {
@@ -68,9 +70,4 @@ func readFile(name string) []string {
 	}
 
 	return lines
-}
-
-func tokenize(line string) []string {
-	tokens := strings.Split(line, " ")
-	return tokens
 }
