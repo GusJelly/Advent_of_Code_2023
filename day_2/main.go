@@ -10,7 +10,12 @@ import (
 
 type Cube struct {
 	number int
-	color string
+	color  string
+}
+
+type Game struct {
+	id int
+	rounds [][]Cube
 }
 
 const (
@@ -21,16 +26,78 @@ const (
 
 func main() {
 	lines := loadFile("input")
-	gameStr := delGameId(lines[0])
-	rounds := makeRoundsStr(gameStr)
+	var games []Game
 
-	cubes := makeCubes(rounds[0])
-	for _, i := range cubes {
-		fmt.Println(i)
+	for _, line := range lines {
+		games = append(games, makeGame(line))
 	}
+
+	fmt.Println(calcGamesIdSum(games))
 }
 
-// Turn string into Cubes
+func calcGamesIdSum(games []Game) int {
+	result := 0
+
+	for _, game := range games {
+		if isGamePossible(game) {
+			result += game.id
+		}
+	}
+
+	return result
+}
+
+func isGamePossible(game Game) bool {
+	result := true
+	max_red := 12
+	max_green := 13
+	max_blue := 14
+
+	for _, rounds := range game.rounds {
+		for _, cube := range rounds {
+			if cube.color == Red && cube.number > max_red {
+				result = false
+			}
+			if cube.color == Green && cube.number > max_green {
+				result = false
+			}
+			if cube.color == Blue && cube.number > max_blue {
+				result = false
+			}
+		}
+	}
+
+	return result
+}
+
+func makeGame(line string) Game {
+	var game Game
+	var cubes [][]Cube
+
+	game.id = getGameId(line)
+
+	str := delGameId(line)
+	rounds := makeRoundsStr(str)
+	for _, round := range rounds {
+		cubes = append(cubes, makeCubes(round))
+	}
+	game.rounds = cubes
+
+	return game
+}
+
+func getGameId(line string) int {
+	lineSlice := strings.Split(line, " ")
+	str := strings.ReplaceAll(lineSlice[1], ":", "")
+	result, err := strconv.Atoi(str)
+	if err != nil {
+		panic(err)
+	}
+
+	return result
+}
+
+// Turn string into Cubes (ONLY USE AFTER REMOVING GAME ID AND MAKING ROUNDS ARRAY)
 func makeCubes(str string) []Cube {
 	var cubes []Cube
 
@@ -47,7 +114,7 @@ func makeCubes(str string) []Cube {
 			panic(err)
 		}
 
-		cube := Cube {cubeNumber, squareSlice[1]}
+		cube := Cube{cubeNumber, squareSlice[1]}
 		cubes = append(cubes, cube)
 	}
 
