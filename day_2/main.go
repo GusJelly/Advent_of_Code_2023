@@ -10,45 +10,69 @@ import (
 
 type Cube struct {
 	number int
-	color  string
+	color string
 }
 
-type Round struct {
-	id          int
-	numberCubes []Cube
-}
-
-type Game struct {
-	id     int
-	rounds []Round
-}
+const (
+	Red   string = "red"
+	Blue  string = "blue"
+	Green string = "green"
+)
 
 func main() {
 	lines := loadFile("input")
+	gameStr := delGameId(lines[0])
+	rounds := makeRoundsStr(gameStr)
 
-	getCubeNumber(lines[0])
+	cubes := makeCubes(rounds[0])
+	for _, i := range cubes {
+		fmt.Println(i)
+	}
 }
 
-// Get cubeNumber
-func getCubeNumber(line string) {
-	_, line, _ = strings.Cut(line, ":")
-	line = strings.Trim(line, " ")
-	rounds := strings.Split(line, ";")
+// Turn string into Cubes
+func makeCubes(str string) []Cube {
+	var cubes []Cube
+
+	fields := strings.Split(str, ",")
+	for i := 0; i < len(fields); i++ {
+		fields[i] = strings.Trim(fields[i], " ")
+	}
+
+	for _, el := range fields {
+		squareSlice := strings.Split(el, " ")
+
+		cubeNumber, err := strconv.Atoi(squareSlice[0])
+		if err != nil {
+			panic(err)
+		}
+
+		cube := Cube {cubeNumber, squareSlice[1]}
+		cubes = append(cubes, cube)
+	}
+
+	return cubes
+}
+
+// Remove game id
+func delGameId(line string) string {
+	_, str, _ := strings.Cut(line, ":")
+	str = strings.Trim(str, " ")
+
+	return str
+}
+
+// Make string into rounds string array
+func makeRoundsStr(line string) []string {
+	var rounds []string
+
+	rounds = strings.Split(line, ";")
 
 	for i := 0; i < len(rounds); i++ {
 		rounds[i] = strings.Trim(rounds[i], " ")
-		fmt.Println(rounds[i])
-	}
-}
-
-// Gets the game's id from the game's tokens slice
-func getGameId(tokens []string) int {
-	id, err := strconv.Atoi(strings.Trim(tokens[1], ":"))
-	if err != nil {
-		panic(err)
 	}
 
-	return id
+	return rounds
 }
 
 // Loads a given file into a string slice
