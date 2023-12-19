@@ -2,11 +2,14 @@ package main
 
 import (
 	"bufio"
+	// "fmt"
 	"os"
 )
 
 func main() {
+	file := loadFile("example")
 
+	checkSymbols(file)
 }
 
 func loadFile(name string) []string {
