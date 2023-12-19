@@ -1,8 +1,8 @@
 package main
 
 import (
-    "os"
-    "bufio"
+	"bufio"
+	"os"
 )
 
 func main() {
