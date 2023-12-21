@@ -25,3 +25,7 @@ func getMatrix(slice []string) [][]string {
 
     return grid
 }
+
+func checkDirections(slice [][]string) {
+
+}

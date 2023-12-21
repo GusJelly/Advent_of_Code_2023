@@ -2,13 +2,19 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 )
 
 func main() {
 	file := loadFile("example")
 
-	getMatrix(file)
+	matrix := getMatrix(file)
+
+	fmt.Println("input:")
+	for _, line := range matrix {
+		fmt.Println(line)
+	}
 }
 
 func loadFile(name string) []string {
