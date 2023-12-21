@@ -9,7 +9,7 @@ import (
 func main() {
 	file := loadFile("example")
 
-	checkSymbols(file)
+	getMatrix(file)
 }
 
 func loadFile(name string) []string {

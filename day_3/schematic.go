@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+    "strings"
+)
 
 var directions = map[string][]int {
     "up":        {0, 1},
@@ -14,8 +16,12 @@ var directions = map[string][]int {
     "downLeft":  {1, -1},
 }
 
-func checkSymbols(slice []string) {
+func getMatrix(slice []string) [][]string {
+    var grid [][]string
+
     for i := 0; i < len(slice); i++ {
-	fmt.Println(slice[i])
+	grid = append(grid, strings.Split(slice[i], ""))
     }
+
+    return grid
 }
