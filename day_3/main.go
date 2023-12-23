@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 )
 
@@ -11,10 +10,7 @@ func main() {
 
 	matrix := getMatrix(file)
 
-	fmt.Println("input:")
-	for _, line := range matrix {
-		fmt.Println(line)
-	}
+	checkSymbols(matrix)
 }
 
 func loadFile(name string) []string {
