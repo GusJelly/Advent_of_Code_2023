@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -18,15 +17,11 @@ var directions map[string][]int = map[string][]int{
 	"downRight": {1, 1},
 }
 
-func findNumbers(schematic [][]string) []int {
-	var result []int
-
-	return result
-}
-
 // Check the matrix for symbols near the numbers
 // Returns the coordinates of the symbols in an array
-func checkSymbols(schematic [][]string) {
+func checkSymbols(schematic [][]string) [][]int {
+	var result [][]int
+
 	for i := 0; i < len(schematic); i++ {
 		for j := 0; j < len(schematic[i]); j++ {
 			for _, dir := range directions {
@@ -34,9 +29,40 @@ func checkSymbols(schematic [][]string) {
 				if err != nil {
 					continue
 				}
-				fmt.Println(schematic[coord[0]][coord[1]])
+				if isSymbol(schematic, coord) {
+					result = append(result, coord)
+				}
 			}
 		}
+	}
+
+	return result
+}
+
+func isSymbol(slice [][]string, coords []int) bool {
+	switch slice[coords[0]][coords[1]] {
+	case "1":
+		return false
+	case "2":
+		return false
+	case "3":
+		return false
+	case "4":
+		return false
+	case "5":
+		return false
+	case "6":
+		return false
+	case "7":
+		return false
+	case "8":
+		return false
+	case "9":
+		return false
+	case ".":
+		return false
+	default:
+		return true
 	}
 }
 
@@ -44,8 +70,8 @@ func checkSymbols(schematic [][]string) {
 // in the given matrix
 func checkDirection(y int, x int, dir []int, slice [][]string) ([]int, error) {
 	newDir := []int{y + dir[0], x + dir[1]}
-	height := len(slice)
-	length := len(slice[0])
+	height := len(slice)-1		// These values need a -1 to
+	length := len(slice[0])-1	// account for index value being out of range
 
 	if newDir[0] > height || newDir[0] < 0 {
 		return []int{0, 0}, errors.New("Out of bounds vertically")
