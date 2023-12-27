@@ -18,7 +18,7 @@ func main() {
 
 	numbers := getNumbers(file)
 	fmt.Println(numbers)
-	calcSum(file, numbers)
+	getIndexes(file, numbers)
 }
 
 func loadFile(name string) []string {

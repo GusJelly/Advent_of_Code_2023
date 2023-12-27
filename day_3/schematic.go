@@ -19,8 +19,9 @@ var directions map[string][]int = map[string][]int{
 	"downRight": {1, 1},
 }
 
-func calcSum(file []string, numbers []string) {
+func getIndexes(file []string, numbers []string) ([][]int, [][]int) {
 	var numbersIndexes [][]int
+	var symbolsIndexes [][]int
 
 	// Get the indexes of all numbers in the file
 	for _, line := range file {
@@ -37,8 +38,15 @@ func calcSum(file []string, numbers []string) {
 		fmt.Println(coord)
 	}
 
-	// Check for symbols around the indexes found
-	// Symbols are anything that is not a number or a dot '.'
+	// Get indexes of symbols around the numbers Symbols are anything that
+	// isn't a number or a dot '.'
+	for _, line := range file {
+		r, _ := regexp.Compile(`[^0-9.]`)
+		matches := r.FindAllStringIndex(line, -1)
+		symbolsIndexes = append(symbolsIndexes, matches...)
+	}
+
+	return numbersIndexes, symbolsIndexes
 }
 
 func getNumbers(matrix []string) []string {
