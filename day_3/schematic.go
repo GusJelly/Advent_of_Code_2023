@@ -2,6 +2,8 @@ package main
 
 import (
 	"errors"
+	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -17,10 +19,44 @@ var directions map[string][]int = map[string][]int{
 	"downRight": {1, 1},
 }
 
+func calcSum(file []string, numbers []string) {
+	var numbersIndexes [][]int
+
+	// Get the indexes of all numbers in the file
+	for _, line := range file {
+		for _, num := range numbers {
+			r, _ := regexp.Compile(num)
+			index := r.FindStringIndex(line)
+			if index != nil {
+				numbersIndexes = append(numbersIndexes, index)
+			}
+		}
+	}
+	// testing:
+	for _, coord := range numbersIndexes {
+		fmt.Println(coord)
+	}
+
+	// Check for symbols around the indexes found
+	// Symbols are anything that is not a number or a dot '.'
+}
+
+func getNumbers(matrix []string) []string {
+	var numbers []string
+	r, _ := regexp.Compile(`\d+`)
+
+	for _, el := range matrix {
+		matches := r.FindAllString(el, -1)
+		numbers = append(numbers, matches...)
+	}
+
+	return numbers
+}
+
 // Check the matrix for symbols near the numbers
 // Returns the coordinates of the symbols in an array
 func checkSymbols(schematic [][]string) [][]int {
-	var result [][]int
+	var symbols [][]int
 
 	for i := 0; i < len(schematic); i++ {
 		for j := 0; j < len(schematic[i]); j++ {
@@ -30,13 +66,13 @@ func checkSymbols(schematic [][]string) [][]int {
 					continue
 				}
 				if isSymbol(schematic, coord) {
-					result = append(result, coord)
+					symbols = append(symbols, coord)
 				}
 			}
 		}
 	}
 
-	return result
+	return symbols
 }
 
 func isSymbol(slice [][]string, coords []int) bool {
@@ -70,8 +106,8 @@ func isSymbol(slice [][]string, coords []int) bool {
 // in the given matrix
 func checkDirection(y int, x int, dir []int, slice [][]string) ([]int, error) {
 	newDir := []int{y + dir[0], x + dir[1]}
-	height := len(slice)-1		// These values need a -1 to
-	length := len(slice[0])-1	// account for index value being out of range
+	height := len(slice) - 1    // These values need a -1 to
+	length := len(slice[0]) - 1 // account for index value being out of range
 
 	if newDir[0] > height || newDir[0] < 0 {
 		return []int{0, 0}, errors.New("Out of bounds vertically")

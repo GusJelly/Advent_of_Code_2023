@@ -9,12 +9,16 @@ import (
 func main() {
 	file := loadFile("example")
 
-	matrix := getMatrix(file)
+	/* matrix := getMatrix(file)
 
 	symbols := checkSymbols(matrix)
 	for _, el := range symbols {
 		fmt.Println(el)
-	}
+	} */
+
+	numbers := getNumbers(file)
+	fmt.Println(numbers)
+	calcSum(file, numbers)
 }
 
 func loadFile(name string) []string {
